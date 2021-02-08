@@ -1,0 +1,40 @@
+---
+- name: Deploy Web App
+  hosts: localhost
+  connection: local
+
+  tasks:
+
+  - name: md5sum variable
+    set_fact:
+      md5_value: "{{ item }}"
+    with_url: http://34.122.244.8:8081/repository/jenkins_artifacts/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5
+
+  - name: md5file
+    stat:
+      path: /opt/tomcat/latest/webapps/websiteisdown.war
+      get_md5: yes
+    register: existing_file
+
+  - debug:
+      msg: "{{ existing_file.stat.md5 }}"
+    when: existing_file.stat.exists
+
+  - name: set force
+    set_fact:
+      force_new_download: "{{ existing_file.stat.md5 != md5_value }}"
+    when: existing_file.stat.exists
+
+  - name: Download package repository
+    get_url:
+      url: http://34.122.244.8:8081/repository/jenkins_artifacts/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war
+      dest: /opt/tomcat/latest/webapps/websiteisdown.war
+      checksum: "md5:{{ md5_value }}"
+      force: "{{ force_new_download | default ('false') }}"
+      mode: '0664'
+
+  - name: Stop tomcat
+    shell: /opt/tomcat/latest/bin/shutdown.sh
+
+  - name: Start tomcat
+    shell: /opt/tomcat/latest/bin/startup.sh
