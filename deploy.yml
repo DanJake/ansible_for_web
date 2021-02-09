@@ -2,6 +2,8 @@
 - name: Deploy Web App
   hosts: localhost
   connection: local
+  become: yes
+  become_user: ansible
 
   tasks:
 
