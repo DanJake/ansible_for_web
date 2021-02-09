@@ -12,7 +12,7 @@
 
   - name: md5file
     stat:
-      path: /opt/tomcat/latest/webapps/websiteisdown.war
+      path: /opt/tomcat/webapps/websiteisdown.war
       get_md5: yes
     register: existing_file
 
@@ -28,13 +28,13 @@
   - name: Download package repository
     get_url:
       url: http://34.122.244.8:8081/repository/jenkins_artifacts/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war
-      dest: /opt/tomcat/latest/webapps/websiteisdown.war
+      dest: /opt/tomcat/webapps/websiteisdown.war
       checksum: "md5:{{ md5_value }}"
       force: "{{ force_new_download | default ('false') }}"
       mode: '0664'
 
   - name: Stop tomcat
-    shell: /opt/tomcat/latest/bin/shutdown.sh
+    shell: /opt/tomcat/bin/shutdown.sh
 
   - name: Start tomcat
-    shell: /opt/tomcat/latest/bin/startup.sh
+    shell: /opt/tomcat/bin/startup.sh
