@@ -10,7 +10,7 @@
   - name: md5sum variable
     set_fact:
       md5_value: "{{ item }}"
-    with_url: http://34.86.155.6:8081/repository/maven-releases/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5
+    with_url: http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5
 
   - name: md5file
     stat:
@@ -29,7 +29,7 @@
 
   - name: Download package repository
     get_url:
-      url: http://34.86.155.6:8081/repository/maven-releases/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war
+      url: http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war
       dest: /opt/tomcat/webapps/websiteisdown.war
       checksum: "md5:{{ md5_value }}"
       force: "{{ force_new_download | default ('false') }}"
