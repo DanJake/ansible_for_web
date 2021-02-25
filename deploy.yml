@@ -7,7 +7,7 @@
 
   vars:
     p_name: "{{ lookup('env','prodadmin_name') }}"
-    p_pass: "{{ lookup('env','prodadmin_password') }}"2
+    p_pass: "{{ lookup('env','prodadmin_password') }}"
     md5_url: "http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5"
     md5_value: "{{ lookup('url', md5_url, username=p_name, password=p_pass) }}"
   tasks:
