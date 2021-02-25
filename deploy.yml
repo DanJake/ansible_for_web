@@ -5,15 +5,15 @@
   become: yes
   become_user: ansible
 
+  vars:
+    p_name: "{{ lookup('env','prodadmin_name') }}"
+    p_pass: "{{ lookup('env','prodadmin_password') }}"
   tasks:
 
   - name: md5sum variable
     set_fact:
-      md5_value: "{{ item }}"
-    with_url: 
-      url: http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5
-      url_username: "{{ lookup('env','prodadmin_name') }}"
-      url_password: "{{ lookup('env','prodadmin_password') }}"
+      md5_value: "{{ lookup('url', 'http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5', username={{ p_name }}, password={{ p_pass }}) }}"
+   
       
   - name: md5file
     stat:
@@ -33,8 +33,8 @@
   - name: Download package repository
     get_url:
       url: http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war
-      url_username: "{{ lookup('env','prodadmin_name') }}"
-      url_password: "{{ lookup('env','prodadmin_password') }}"
+      url_username: "{{ p_name }}"
+      url_password: "{{ p_pass }}"
       dest: /opt/tomcat/webapps/websiteisdown.war
       checksum: "md5:{{ md5_value }}"
       force: "{{ force_new_download | default ('false') }}"
