@@ -10,7 +10,10 @@
   - name: md5sum variable
     set_fact:
       md5_value: "{{ item }}"
-    with_url: http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5
+    with_url: 
+      url: http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5
+      url_username: "{{ lookup('env','prodadmin_name') }}"
+      url_password: "{{ lookup('env','prodadmin_password') }}"
       
   - name: md5file
     stat:
