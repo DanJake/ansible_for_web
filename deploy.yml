@@ -7,14 +7,11 @@
 
   vars:
     p_name: "{{ lookup('env','prodadmin_name') }}"
-    p_pass: "{{ lookup('env','prodadmin_password') }}"
+    p_pass: "{{ lookup('env','prodadmin_password') }}"2
+    md5_url: "http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5"
+    md5_value: "{{ lookup('url', md5_url, username=p_name, password=p_pass) }}"
   tasks:
-
-  - name: md5sum variable
-    set_fact:
-      md5_value: "{{ lookup('url', 'http://34.86.155.6:8081/repository/my-web-project/com/efsavage/hello-world-war/1.0.0/hello-world-war-1.0.0.war.md5', username={{ p_name }}, password={{ p_pass }}) }}"
-   
-      
+  
   - name: md5file
     stat:
       path: /opt/tomcat/webapps/websiteisdown.war
